@@ -27,14 +27,21 @@ describe DockingStation do
   describe '#dock' do
     it "raises an error when dock is full" do
      # subject.dock_bike(Bike.new)
-      expect {21.times {subject.dock_bike(Bike.new)}}.to raise_error "The dockingstation is full"
+      expect {(DockingStation::DEFAULT_CAPACITY + 1).times {subject.dock_bike(Bike.new)}}.to raise_error "The dockingstation is full"
     end
 
     it "doesn't raise an error for 20 bikes" do
-      expect {20.times {subject.dock_bike(Bike.new)}}.not_to raise_error "The dockingstation is full"
+      expect {DockingStation::DEFAULT_CAPACITY.times {subject.dock_bike(Bike.new)}}.not_to raise_error "The dockingstation is full"
     end
   end
-
+  it 'takes an argumenent for the bike capacity' do
+    station = DockingStation.new(30)
+    expect(station.capacity).to eq 30
+  end
+  it 'sets the default vaule of capacity to 20' do
+    station = DockingStation.new
+    expect(station.capacity).to eq 20
+  end
   #it "allows 20 bikes" do
    # dock = DockingStation.new
   #  expect {20.times {dock.dock_bike(Bike.new)} }.not_to raise_error ""
