@@ -1,30 +1,33 @@
 require 'boris_classes'
 
 describe DockingStation do
-  station = DockingStation.new(0)
-  it 'responds to releasing a bike from docking station' do
-    expect(DockingStation.new).to respond_to(:release_bike) #DockingStation.new is the object of the class
-  end
+
+  it { is_expected.to respond_to(:release_bike) }
+  it { is_expected.to respond_to(:dock_bike) }
 
   it 'Checks to see if the bike is working' do
-  station = DockingStation.new(1)
-  # bike = station.release_bike
+  station = DockingStation.new
+  station.dock_bike(Bike.new)
   expect(station.release_bike.working?).to eq true
   end
   
-  it 'responds to a bike being docked' do
-    expect(DockingStation.new).to respond_to(:dock_bike)
+  describe (DockingStation.new).dock_bike(Bike.new) do
+    it { is_expected.to be_an_instance_of(Bike) }
   end
- #it "Won't all a bike to dock if station is full" do
-  #  station = DockingStation.new(10)
-   # expect(station.dock_bike).to eq "There is already a bike here"
-  #end
-  it 'raises an error if the station is empty' do
-    station = DockingStation.new(0)
-    expect {station.release_bike}.to raise_error
+  it ".bike is a bike" do
+    bike = Bike.new
+    subject.dock_bike(bike)
+    expect(subject.bikes).to eq bike
   end
-  it 'raises an error when trying to dock a bike at a full docking station' do
-    station = DockingStation.new(10)
-    expect {station.dock_bike}.to raise_error
+  describe "#release_bike" do
+    it 'raises an error when there are no bikes' do
+      expect { subject.release_bike}.to raise_error "There are no bikes"
+    end
+  end
+  describe '#dock' do
+    it "raises an error when dock is full" do
+      subject.dock_bike(Bike.new)
+      expect {subject.dock_bike(Bike.new)}.to raise_error "The dockingstation is full"
+    end
   end
 end
